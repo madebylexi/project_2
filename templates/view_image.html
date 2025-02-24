@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ai_response.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        img {
+            width: 300px;
+            height: 250px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            margin-top: 20px;  /* Add space at the top */
+            margin-bottom: 20px; /* Add space at the bottom */
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .description {
+            font-size: 18px;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Title: {{ ai_response.title }}</div>
+    <img src="https://storage.googleapis.com/{{ bucket_name }}/{{ filename }}" alt="{{ filename }}">
+    <div class="description">Description: {{ ai_response.description }}</div>
+</body>
+</html>
