@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN mkdir -p /app/files && chmod 777 /app/files
 
 # Expose the port that Flask will run on
-EXPOSE 8083
+EXPOSE 8080
 
 # Define a build argument for the API key
 ARG GEMINI_API
@@ -22,4 +22,4 @@ ARG GEMINI_API
 ENV GEMINI_API=${GEMINI_API}
 
 # Command to run the app with Gunicorn for production use
-CMD ["gunicorn", "--bind", "0.0.0.0:8083", "main:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "main:app"]

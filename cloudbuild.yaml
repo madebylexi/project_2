@@ -1,0 +1,25 @@
+steps:
+# Step 1: Build Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/image-app:$COMMIT_SHA', '.']
+
+# Step 2: Push image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/image-app:$COMMIT_SHA']
+
+# Step 3: Deploy to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+    [
+      'run', 'deploy', 'image-app',
+      '--image', 'gcr.io/$PROJECT_ID/image-app:$COMMIT_SHA',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--set-env-vars', 'GEMINI_API=${_GEMINI_API},BACKGROUND_COLOR=${_COLOR},BUCKET_NAME=${_BUCKET_NAME}',
+      '--tag', '${_COLOR}'
+    ]
+
+images:
+- 'gcr.io/$PROJECT_ID/image-app:$COMMIT_SHA'

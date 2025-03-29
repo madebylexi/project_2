@@ -32,29 +32,32 @@ Respond in JSON format:
   "description": "<A clear and accurate description>"
 }"""
 
+# COMBINED: Upload form + file listing with dynamic background
 @app.route('/')
-def index():
-    """Display file upload form and list of uploaded files."""
-    index_html = """
-    <form method="post" enctype="multipart/form-data" action="/upload">
-        <div>
-            <label for="file">Choose file to upload</label>
-            <input type="file" id="file" name="form_file" accept="image/*"/>
-        </div>
-        <div>
-            <button>Submit</button>
-        </div>
-    </form>
-    <ul>
+def home():
+    background_color = os.getenv("BACKGROUND_COLOR", "white")
+
+    index_html = f"""
+    <html>
+        <head><title>Upload Image</title></head>
+        <body style="background-color:{background_color}; text-align:center;">
+            <h1>Upload an Image</h1>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="form_file" required><br><br>
+                <input type="submit" value="Upload">
+            </form>
+            <h2>Uploaded Files</h2>
+            <ul>
     """
+
     try:
         for file in get_list_of_files():
             if not file.endswith('.json'):
                 index_html += f'<li><a href="/files/{file}" target="_blank">{file}</a></li>'
     except Exception as e:
         index_html += f"<li>Error fetching files: {str(e)}</li>"
-    
-    index_html += "</ul>"
+
+    index_html += "</ul></body></html>"
     return index_html
 
 @app.route('/upload', methods=["POST"])
@@ -155,4 +158,4 @@ def get_ai_response(json_filename):
         raise
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8083)
+    app.run(debug=True, host="0.0.0.0", port=8080)
